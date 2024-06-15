@@ -23,6 +23,8 @@ async function bootstrap() {
   
   await app.listen(envs.port);
 
+  console.log('Primer Cambio')
+
   logger.log(`Getaway running on port ${envs.port}`);
 
 

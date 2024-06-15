@@ -12,15 +12,22 @@ export class OrdersController {
   constructor(
     @Inject(NATS_SERVICE) private readonly natsClient: ClientProxy
   ) {}
-
+ 
   @Post()
   create(@Body() createOrderDto: CreateOrderDto) {
     return this.natsClient.send('createOrder', createOrderDto)
   }
 
   @Get()
-  findAll(@Query() orderPaginationDto: OrderPaginationDto) {
-    return this.natsClient.send('findAllOrders', orderPaginationDto)
+  async findAll(@Query() orderPaginationDto: OrderPaginationDto) {
+    try {
+      const orders = await firstValueFrom(
+        this.natsClient.send('findAllOrders', orderPaginationDto)
+      )
+      return orders;
+    } catch (error) {
+      throw new RpcException(error);
+    }
   }
 
   @Get('id/:id')
@@ -28,16 +35,11 @@ export class OrdersController {
     
     try {
       const order = await firstValueFrom(
-        
         this.natsClient.send('findOneOrder', { id })
-
       );
-
       return order;
-
     } catch (error) {
-
-      throw new RpcException(error)
+      throw new RpcException( error )
     }
   }
 

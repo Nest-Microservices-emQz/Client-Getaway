@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { envs } from './confing';
 import { Logger, ValidationPipe } from '@nestjs/common';
-import { RpcException } from '@nestjs/microservices';
 import { RpcCustomExceptionFilter } from './common';
 
 async function bootstrap() {
